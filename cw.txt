@@ -1,0 +1,40 @@
+CREATE TABLE REGIONS(region_id INT PRIMARY KEY,
+region_name VARCHAR2(60));
+CREATE TABLE COUNTRIES(country_id INT PRIMARY KEY,
+country_name VARCHAR2(60),
+region_id INT,
+FOREIGN KEY (region_id) REFERENCES REGIONS(region_id));
+CREATE TABLE LOCATIONS(location_id INT PRIMARY KEY,
+street_address VARCHAR2(60),
+postal_code VARCHAR2(20),
+city VARCHAR2(30),
+state_province VARCHAR2(60),
+country_id INT,
+FOREIGN KEY (country_id) REFERENCES COUNTRIES(country_id));
+CREATE TABLE DEPARTMENTS(department_id INT PRIMARY KEY,
+department_name VARCHAR2(60),
+manager_id INT,
+location_id INT,
+FOREIGN KEY (location_id) REFERENCES LOCATIONS(location_id));
+CREATE TABLE JOB_HISTORY(employee_id INT NOT NULL,
+start_date DATE NOT NULL,
+end_date DATE,
+job_id INT NOT NULL,
+department_id INT,
+CONSTRAINT PK_Job_History PRIMARY KEY (employee_id,start_date),
+FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(department_id));
+CREATE TABLE JOBS(job_id INT PRIMARY KEY,
+job_title VARCHAR2(60),
+min_salary FLOAT,
+max_salary FLOAT);
+CREATE TABLE EMPLOYEES(employee_id INT PRIMARY KEY,
+first_name VARCHAR2(60),
+last_name VARCHAR2(60),
+email VARCHAR2(60),
+phone_number INT,
+hire_date DATE,
+job_id INT,
+salary FLOAT,
+commission_pct VARCHAR2(60),
+manager_id INT,
+department_id INT);
