@@ -1,0 +1,29 @@
+DECLARE
+  numer_max NUMBER;
+  nowy_numer NUMBER;
+  nowa_nazwa VARCHAR2(30);
+  nowy_location_id NUMBER; 
+
+BEGIN
+
+  SELECT MAX(DEPARTMENT_ID) INTO numer_max FROM DEPARTMENTS;
+
+  nowy_numer := numer_max + 10;
+  nowa_nazwa := 'EDUCATION';
+  INSERT INTO DEPARTMENTS (DEPARTMENT_ID, DEPARTMENT_NAME)
+  VALUES (nowy_numer, nowa_nazwa);
+
+  nowy_location_id := 3000;
+
+  UPDATE DEPARTMENTS
+  SET LOCATION_ID = nowy_location_id
+  WHERE DEPARTMENT_ID = nowy_numer;
+
+  COMMIT;
+  
+  DBMS_OUTPUT.PUT_LINE('Nowy departament został dodany z numerem ' || nowy_numer);
+EXCEPTION
+  WHEN OTHERS THEN
+    ROLLBACK;
+    DBMS_OUTPUT.PUT_LINE('Wystąpił błąd: ' || SQLERRM);
+END;

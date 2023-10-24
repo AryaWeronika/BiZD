@@ -1,0 +1,20 @@
+DECLARE
+  numer_max NUMBER;
+  nowy_numer NUMBER;
+  nowa_nazwa VARCHAR2(30);
+
+BEGIN
+  SELECT MAX(DEPARTMENT_ID) INTO numer_max FROM DEPARTMENTS;
+  nowy_numer := numer_max + 10;
+  nowa_nazwa := 'EDUCATION';
+  INSERT INTO DEPARTMENTS (DEPARTMENT_ID, DEPARTMENT_NAME)
+  VALUES (nowy_numer, nowa_nazwa);
+
+  COMMIT;
+  
+  DBMS_OUTPUT.PUT_LINE('Nowy departament został dodany z numerem ' || nowy_numer);
+EXCEPTION
+  WHEN OTHERS THEN
+    ROLLBACK;
+    DBMS_OUTPUT.PUT_LINE('Wystąpił błąd: ' || SQLERRM);
+END;
