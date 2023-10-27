@@ -1,0 +1,24 @@
+DECLARE
+  CURSOR wynagrodzenie_cursor IS
+    SELECT e.last_name, e.salary
+    FROM employees e
+    WHERE e.department_id = 50;
+    
+  v_last_name employees.last_name%TYPE;
+  v_salary employees.salary%TYPE;
+BEGIN
+  OPEN wynagrodzenie_cursor;
+  
+  LOOP
+    FETCH wynagrodzenie_cursor INTO v_last_name, v_salary;
+    EXIT WHEN wynagrodzenie_cursor%NOTFOUND;
+    
+    IF v_salary > 3100 THEN
+      DBMS_OUTPUT.PUT_LINE(v_last_name || ' nie dawać podwyżki');
+    ELSE
+      DBMS_OUTPUT.PUT_LINE(v_last_name || ' dać podwyżkę');
+    END IF;
+  END LOOP;
+  
+  CLOSE wynagrodzenie_cursor;
+END;

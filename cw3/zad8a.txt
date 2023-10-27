@@ -1,0 +1,24 @@
+DECLARE
+  CURSOR zarobki_cursor (p_min_salary NUMBER, p_max_salary NUMBER, p_part_of_first_name VARCHAR2) IS
+    SELECT e.salary, e.first_name, e.last_name
+    FROM employees e
+    WHERE e.salary BETWEEN p_min_salary AND p_max_salary
+      AND (UPPER(e.first_name) LIKE UPPER('%' || p_part_of_first_name || '%'));
+  
+  v_salary employees.salary%TYPE;
+  v_first_name employees.first_name%TYPE;
+  v_last_name employees.last_name%TYPE;
+BEGIN
+  OPEN zarobki_cursor(1000, 5000, 'a');
+  
+  LOOP
+    FETCH zarobki_cursor INTO v_salary, v_first_name, v_last_name;
+    EXIT WHEN zarobki_cursor%NOTFOUND;
+    
+    DBMS_OUTPUT.PUT_LINE('Imię: ' || v_first_name);
+    DBMS_OUTPUT.PUT_LINE('Nazwisko: ' || v_last_name);
+    DBMS_OUTPUT.PUT_LINE('Zarobki: ' || v_salary);
+  END LOOP;
+  
+  CLOSE zarobki_cursor;
+END;

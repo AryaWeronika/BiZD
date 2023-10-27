@@ -1,0 +1,29 @@
+CREATE OR REPLACE PROCEDURE ModyfikujStanowisko(p_Job_id IN Jobs.Job_id%TYPE, p_New_Title IN Jobs.Job_title%TYPE) AS
+  v_rows_updated NUMBER;
+BEGIN
+
+  UPDATE Jobs
+  SET Job_title = p_New_Title
+  WHERE Job_id = p_Job_id;
+  
+  v_rows_updated := SQL%ROWCOUNT;
+  
+
+  IF v_rows_updated = 0 THEN
+    RAISE_APPLICATION_ERROR(-20001, 'No Jobs updated');
+  ELSE
+
+    COMMIT;
+  END IF;
+EXCEPTION
+  WHEN OTHERS THEN
+
+    DBMS_OUTPUT.PUT_LINE('Wystąpił nieoczekiwany błąd: ' || SQLERRM);
+END;
+/
+
+-- wywolanie
+BEGIN
+  ModyfikujStanowisko('IT_PROG', 'asd');
+END;
+/

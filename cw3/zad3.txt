@@ -1,0 +1,18 @@
+DECLARE
+  liczba VARCHAR(10);
+BEGIN
+  liczba := '1';
+  
+  FOR i IN 2..10 LOOP
+    -- Pomijaj liczby 4 i 6
+    IF liczba = '4' OR liczba = '6' THEN
+      NULL;
+    ELSE
+      INSERT INTO nowa (numer) VALUES (liczba);
+    END IF;
+    
+    liczba := TO_CHAR(TO_NUMBER(liczba) + 1);
+  END LOOP;
+  
+  COMMIT;
+END;

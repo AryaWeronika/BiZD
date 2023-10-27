@@ -1,0 +1,9 @@
+DECLARE
+  v_country countries%ROWTYPE;
+BEGIN
+
+  SELECT * INTO v_country FROM countries WHERE country_id = 'CA';
+
+  DBMS_OUTPUT.PUT_LINE('Kraj: ' || v_country.country_name);
+  DBMS_OUTPUT.PUT_LINE('Region ID: ' || v_country.region_id);
+END;

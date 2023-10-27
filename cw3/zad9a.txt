@@ -1,0 +1,18 @@
+CREATE OR REPLACE PROCEDURE DodajStanowisko(p_Job_id IN Jobs.Job_id%TYPE, p_Job_title IN Jobs.Job_title%TYPE) AS
+BEGIN
+  INSERT INTO Jobs(Job_id, Job_title) VALUES (p_Job_id, p_Job_title);
+  COMMIT;
+  
+  EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+      DBMS_OUTPUT.PUT_LINE('Stanowisko o takim Job_id już istnieje.');
+    WHEN OTHERS THEN
+      DBMS_OUTPUT.PUT_LINE('Wystąpił nieoczekiwany błąd: ' || SQLERRM);
+END;
+/
+
+--wywolanie
+BEGIN
+  DodajStanowisko('IT_PROG', 'Programmer');
+END;
+/

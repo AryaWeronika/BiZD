@@ -1,0 +1,18 @@
+DECLARE
+  TYPE department_cursor IS REF CURSOR;
+  department_data department_cursor;
+  v_department departments%ROWTYPE;
+BEGIN
+  OPEN department_data FOR SELECT * FROM departments;
+  
+  LOOP
+    FETCH department_data INTO v_department;
+    EXIT WHEN department_data%NOTFOUND;
+    
+    DBMS_OUTPUT.PUT_LINE('Departament ID: ' || v_department.department_id);
+    DBMS_OUTPUT.PUT_LINE('Nazwa departamentu: ' || v_department.department_name);
+    -- Dodaj inne kolumny, którymi jesteś zainteresowany
+  END LOOP;
+  
+  CLOSE department_data;
+END;

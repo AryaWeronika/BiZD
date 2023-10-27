@@ -1,0 +1,22 @@
+DECLARE
+  TYPE department_table IS TABLE OF departments.department_name%TYPE INDEX BY PLS_INTEGER;
+  department_names department_table;
+BEGIN
+  BEGIN
+    SELECT department_name BULK COLLECT INTO department_names FROM departments;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      DBMS_OUTPUT.PUT_LINE('Brak danych w tabeli "departments".');
+      RETURN;
+  END;
+
+  FOR i IN 10..100 LOOP
+    IF MOD(i, 10) = 0 THEN
+      IF department_names.EXISTS(i) THEN
+        DBMS_OUTPUT.PUT_LINE('Numer ' || i || ': ' || department_names(i));
+      ELSE
+        DBMS_OUTPUT.PUT_LINE('Brak danych dla numeru ' || i);
+      END IF;
+    END IF;
+  END LOOP;
+END;
