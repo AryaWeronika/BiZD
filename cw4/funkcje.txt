@@ -1,0 +1,46 @@
+CREATE OR REPLACE FUNCTION PobierzNazwePracy(p_Job_id IN Jobs.Job_id%TYPE) RETURN Jobs.Job_title%TYPE IS
+  v_job_title Jobs.Job_title%TYPE;
+BEGIN
+  SELECT Job_title INTO v_job_title FROM Jobs WHERE Job_id = p_Job_id;
+  RETURN v_job_title;
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    RAISE_APPLICATION_ERROR(-20001, 'Praca o podanym ID nie istnieje');
+END;
+/
+CREATE OR REPLACE FUNCTION ObliczRoczneZarobki(p_Employee_id IN Employees.Employee_id%TYPE) RETURN NUMBER IS
+  v_yearly_salary NUMBER;
+BEGIN
+  SELECT (salary * 12) + NVL(salary * commission_pct, 0) INTO v_yearly_salary
+  FROM Employees
+  WHERE Employee_id = p_Employee_id;
+
+  RETURN v_yearly_salary;
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    RETURN NULL; 
+END;
+/
+CREATE OR REPLACE FUNCTION PobierzNumerKierunkowy(p_telefon VARCHAR2) RETURN VARCHAR2 IS
+  v_area_code VARCHAR2(10);
+BEGIN
+ 
+  v_area_code := SUBSTR(p_telefon, 1, 3);
+  RETURN v_area_code;
+END;
+/
+CREATE OR REPLACE FUNCTION FormatujTekst(p_tekst VARCHAR2) RETURN VARCHAR2 IS
+  v_formatted_text VARCHAR2(100);
+BEGIN
+  v_formatted_text := INITCAP(p_tekst);
+  RETURN v_formatted_text;
+END;
+/
+CREATE OR REPLACE FUNCTION PobierzDateUrodzenia(p_pesel VARCHAR2) RETURN DATE IS
+  v_birth_date DATE;
+BEGIN
+ 
+  v_birth_date := TO_DATE(SUBSTR(p_pesel, 1, 6), 'YYMMDD');
+  RETURN v_birth_date;
+END;
+/

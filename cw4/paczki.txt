@@ -1,0 +1,82 @@
+CREATE OR REPLACE PACKAGE MojaPaczka AS
+  PROCEDURE DodajRegion(p_id IN NUMBER, p_nazwa IN VARCHAR2);
+
+  PROCEDURE AktualizujRegion(p_id IN NUMBER, p_nowaNazwa IN VARCHAR2);
+
+  FUNCTION PobierzNazweRegionu(p_id IN NUMBER) RETURN VARCHAR2;
+
+  PROCEDURE UsunRegion(p_id IN NUMBER);
+END MojaPaczka;
+/
+
+CREATE OR REPLACE PACKAGE BODY MojaPaczka AS
+
+  PROCEDURE DodajRegion(p_id IN NUMBER, p_nazwa IN VARCHAR2) AS
+  BEGIN
+    INSERT INTO REGIONS (REGION_ID, REGION_NAME) VALUES (p_id, p_nazwa);
+  END DodajRegion;
+
+  PROCEDURE AktualizujRegion(p_id IN NUMBER, p_nowaNazwa IN VARCHAR2) AS
+  BEGIN
+    UPDATE REGIONS SET REGION_NAME = p_nowaNazwa WHERE REGION_ID = p_id;
+  END AktualizujRegion;
+
+  FUNCTION PobierzNazweRegionu(p_id IN NUMBER) RETURN VARCHAR2 AS
+    v_nazwa VARCHAR2(50);
+  BEGIN
+    SELECT REGION_NAME INTO v_nazwa FROM REGIONS WHERE REGION_ID = p_id;
+    RETURN v_nazwa;
+  END PobierzNazweRegionu;
+
+  PROCEDURE UsunRegion(p_id IN NUMBER) AS
+  BEGIN
+    DELETE FROM REGIONS WHERE REGION_ID = p_id;
+  END UsunRegion;
+END MojaPaczka;
+/
+
+
+CREATE OR REPLACE PACKAGE MojaPaczkaRegions AS
+  PROCEDURE DodajRegion(p_id IN NUMBER, p_nazwa IN VARCHAR2);
+
+  PROCEDURE AktualizujRegion(p_id IN NUMBER, p_nowaNazwa IN VARCHAR2);
+
+  FUNCTION PobierzWszystkieRegiony RETURN SYS_REFCURSOR;
+
+  FUNCTION PobierzRegionyPoNazwie(p_nazwa IN VARCHAR2) RETURN SYS_REFCURSOR;
+
+  PROCEDURE UsunRegion(p_id IN NUMBER);
+END MojaPaczkaRegions;
+/
+
+CREATE OR REPLACE PACKAGE BODY MojaPaczkaRegions AS
+  PROCEDURE DodajRegion(p_id IN NUMBER, p_nazwa IN VARCHAR2) AS
+  BEGIN
+    INSERT INTO REGIONS (REGION_ID, REGION_NAME) VALUES (p_id, p_nazwa);
+  END DodajRegion;
+
+  PROCEDURE AktualizujRegion(p_id IN NUMBER, p_nowaNazwa IN VARCHAR2) AS
+  BEGIN
+    UPDATE REGIONS SET REGION_NAME = p_nowaNazwa WHERE REGION_ID = p_id;
+  END AktualizujRegion;
+
+  FUNCTION PobierzWszystkieRegiony RETURN SYS_REFCURSOR AS
+    v_cursor SYS_REFCURSOR;
+  BEGIN
+    OPEN v_cursor FOR SELECT * FROM REGIONS;
+    RETURN v_cursor;
+  END PobierzWszystkieRegiony;
+
+  FUNCTION PobierzRegionyPoNazwie(p_nazwa IN VARCHAR2) RETURN SYS_REFCURSOR AS
+    v_cursor SYS_REFCURSOR;
+  BEGIN
+    OPEN v_cursor FOR SELECT * FROM REGIONS WHERE REGION_NAME = p_nazwa;
+    RETURN v_cursor;
+  END PobierzRegionyPoNazwie;
+
+  PROCEDURE UsunRegion(p_id IN NUMBER) AS
+  BEGIN
+    DELETE FROM REGIONS WHERE REGION_ID = p_id;
+  END UsunRegion;
+END MojaPaczkaRegions;
+/
